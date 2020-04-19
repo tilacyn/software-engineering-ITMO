@@ -19,12 +19,13 @@ import java.util.function.Function;
 @AllArgsConstructor
 public class EmulatorRestService {
     private int port;
-    private static final String urlTemplate = "http://localhost:%d/%s";
+    private String ip;
+    private static final String urlTemplate = "http://%s:%d/%s";
 
 
     @SneakyThrows
     public Double getQuote(String symbol) {
-        URIBuilder builder = new URIBuilder(String.format(urlTemplate, port, "quote"))
+        URIBuilder builder = new URIBuilder(String.format(urlTemplate, ip, port, "quote"))
                     .addParameter("symbol", symbol);
         HttpGet get = new HttpGet(builder.build());
         return request(get, Double::valueOf);
@@ -32,7 +33,7 @@ public class EmulatorRestService {
 
     @SneakyThrows
     public double buy(String symbol, int qty) {
-        URIBuilder builder = new URIBuilder(String.format(urlTemplate, port, "buy"))
+        URIBuilder builder = new URIBuilder(String.format(urlTemplate, ip, port, "buy"))
                 .addParameter("symbol", symbol)
                 .addParameter("qty", String.valueOf(qty));
         HttpPut put = new HttpPut(builder.build());
@@ -41,7 +42,7 @@ public class EmulatorRestService {
 
     @SneakyThrows
     public double sell(String symbol, int qty) {
-        URIBuilder builder = new URIBuilder(String.format(urlTemplate, port, "sell"))
+        URIBuilder builder = new URIBuilder(String.format(urlTemplate, ip, port, "sell"))
                 .addParameter("symbol", symbol)
                 .addParameter("qty", String.valueOf(qty));
         HttpPut put = new HttpPut(builder.build());
